@@ -1,0 +1,69 @@
+services:
+  api_gateway-app:
+    build: ./api_gateway_service/
+    container_name: api_gateway_app
+    ports:
+      - "3001:3001"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_DEBUG=1
+      - FLASK_RUN_PORT=3001
+    depends_on:
+      - mongodb
+    networks:
+      - mynetwork
+
+  identity-app:
+    build: ./identity_service/
+    container_name: identity-app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_DEBUG=1
+      - FLASK_RUN_PORT=5000
+    depends_on:
+      - mongodb
+    networks:
+      - mynetwork
+
+  message_with_ai-app:
+    build: ./message_with_AL_service/
+    container_name: message_with_ai-app
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_DEBUG=1
+      - FLASK_RUN_PORT=5001
+    depends_on:
+      - mongodb
+    networks:
+      - mynetwork
+
+  profile-app:
+    build: ./proflie_service/
+    container_name: profile-app
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_DEBUG=1
+      - FLASK_RUN_PORT=5002
+    depends_on:
+      - mongodb
+    networks:
+      - mynetwork
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
